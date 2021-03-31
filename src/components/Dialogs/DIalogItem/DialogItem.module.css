@@ -1,0 +1,18 @@
+
+.dialog{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+.dialog .active, a:active{
+    color: gold;
+}
+.dialog a{
+    text-decoration: none;
+    color: white;
+}
+.dialog{
+    border-bottom: 1px solid rgba(253, 249, 249, 0.315);
+    margin: 4px;
+    font-size: 20px;
+}
