@@ -1,7 +1,7 @@
 .content img{
     width: 50px;
 }
-.content__post{
+.content__post form{
     display: flex;
     flex-direction: column;
 }

@@ -1,50 +1,75 @@
+import { profileAPI } from "../components/api/api";
+
+
 const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
+const SET_STATUS = 'SET_STATUS';
+
+
 
 let initialState = {
     postsData:[
         {id:1, message: 'Hi how are you', likecounts: 12},
         {id:2, message: "It's my first post", likecounts: 31}
     ],
-    newPostText: '',
-    profile: null
+    profile: null,
+    status: ''
 }
 
 export const profileReducer = (state = initialState, action) => {
         switch (action.type) {
-            case UPDATE_NEW_POST_TEXT:{
-                return{
-                    ...state,
-                    newPostText: action.newText
-                }
-            };
             case ADD_POST:{
-                let newPost ={
+                let addText ={
                     id:5,
-                    message: state.newPostText,
+                    message: action.addText,
                     likecounts:0
                 };
                 return{
                     ...state,
-                    postsData: [...state.postsData,newPost],
-                    newPostText: ''
+                    postsData: [...state.postsData, addText],
+                    addText: ''
                 }
             };
-            case SET_USER_PROFILE:{
+            case SET_USER_PROFILE:
                 return {
                     ...state, 
                     profile: action.profile
+                };
+            case SET_STATUS:
+                return{
+                    ...state,
+                    status: action.status
                 }
-            };
             default:
                     return state;
         }
-    return state;
 }
 
 export const setUserProfile = (profile) =>({type: SET_USER_PROFILE, profile})
-export const updateNewPostTextActionCreator = (text) =>({type: UPDATE_NEW_POST_TEXT, newText: text })
-export const addPostActionCreator = () =>({type: ADD_POST})
+export const addPostActionCreator = (addText) =>({type: ADD_POST, addText})
+export const setUserStatus = (status) => ({ type: SET_STATUS, status })
+
+
+export const getProfile = (userId) => (dispatch) =>{
+    profileAPI.getProfile(userId).then(response => {
+        dispatch(setUserProfile(response.data));
+    });
+}
+
+
+export const getStatus = (userId) => (dispatch) =>{
+    profileAPI.getStatus(userId).then(response => {
+        dispatch(setUserStatus(response.data));
+    });
+}
+
+
+export const updateStatus = (status) => (dispatch) =>{
+    profileAPI.updateStatus(status).then(response => {
+        if(response.data.resultCode === 0){
+            dispatch(setUserStatus(status));
+        }
+    });
+}
 
 export default profileReducer;
